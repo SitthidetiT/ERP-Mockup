@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import PrintEngine from "../components/quotation/PrintEngine";
 import { DashboardView } from "../components/dashboard/DashboardView";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { QuickActionCard } from "@/components/dashboard/QuickActionCard";
@@ -1474,15 +1475,17 @@ function JobTab({
             body * {
               visibility: hidden;
             }
-            .printable-article, .printable-article * {
+            .print-engine-container, .print-engine-container * {
               visibility: visible;
             }
-            .printable-article {
+            .print-engine-container {
               position: absolute;
               left: 0;
               top: 0;
-              margin: 0 !important;
-              box-shadow: none !important;
+              width: 100%;
+            }
+            .screen-only-quote {
+              display: none !important;
             }
             @page {
               size: A4;
@@ -1490,6 +1493,8 @@ function JobTab({
             }
           }
         `}</style>
+        <PrintEngine job={job} quoteSubtotal={quoteSubtotal} quoteVat={quoteVat} quoteGrandTotal={quoteGrandTotal} />
+        <div className="screen-only-quote">
         <article className="printable-article" style={{
           width: '210mm',
           minHeight: '297mm',
@@ -1700,6 +1705,7 @@ function JobTab({
             </div>
           </div>
         </article>
+        </div>
 
         {job.stage === 0 && canEditQuote && (
           <div className="inline-form quote-line-editor">
