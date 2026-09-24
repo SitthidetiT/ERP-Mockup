@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { MetricCard } from "@/components/dashboard/MetricCard";
+import { QuickActionCard } from "@/components/dashboard/QuickActionCard";
 import {
   Activity,
   ArrowDownRight,
@@ -805,7 +807,10 @@ export default function Home() {
             <kbd>⌘ K</kbd>
           </div>
           <div className="top-actions">
-            <span className="today">24 กันยายน 2569</span>
+            <span className="today">
+              <strong>24 กันยายน 2569</strong>
+              <small>วันพุธ</small>
+            </span>
             <div className="notice-wrap">
               <button
                 className="icon-button bell"
@@ -831,7 +836,7 @@ export default function Home() {
             <div className="role-switch">
               <div className="role-avatar">{role.slice(0, 1)}</div>
               <div>
-                <small>กำลังดูในบทบาท</small>
+                <small>สวัสดีตอนบ่ายครับ</small>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value as Role)}
@@ -979,7 +984,9 @@ export default function Home() {
             </>
           ) : (
             <>
-              <div className="page-heading">
+              <div
+                className={`page-heading ${module === "dashboard" ? "dashboard-heading" : ""}`}
+              >
                 <div>
                   <div className="eyebrow">
                     ERP COMPANY PLATFORM /{" "}
@@ -1012,69 +1019,69 @@ export default function Home() {
               {module === "dashboard" && (
                 <>
                   <div className="stats-grid">
-                    <Stat
+                    <MetricCard
                       icon={<FolderKanban size={20} />}
                       label="งานทั้งหมด"
                       value={String(visibleJobs.length).padStart(2, "0")}
-                      meta="งานตัวอย่างในระบบ"
+                      detail="งานที่รอดำเนินการในระบบ"
                       tone="blue"
                     />
-                    <Stat
+                    <MetricCard
                       icon={<Activity size={20} />}
                       label="กำลังดำเนินการ"
                       value={String(activeJobs).padStart(2, "0")}
-                      meta="อยู่ในกระบวนการ"
+                      detail="อยู่ในกระบวนการ"
                       tone="purple"
                     />
-                    <Stat
+                    <MetricCard
                       icon={<Clock3 size={20} />}
                       label="งานเร่งด่วน"
                       value={String(urgentJobs).padStart(2, "0")}
-                      meta="ต้องติดตามใกล้ชิด"
+                      detail="ต้องติดตามใกล้ชิด"
                       tone="amber"
                     />
-                    <Stat
+                    <MetricCard
                       icon={<CheckCircle2 size={20} />}
                       label="ส่งมอบแล้ว"
                       value={String(
                         visibleJobs.filter((j) => j.stage === 11).length,
                       ).padStart(2, "0")}
-                      meta="เสร็จสิ้นการจัดส่ง"
+                      detail="เสร็จสิ้นการจัดส่ง"
                       tone="green"
                     />
                   </div>
                   {isManager && (
                     <div className="scenario-grid">
-                      <button
+                      <QuickActionCard
+                        eyebrow="A · งานขาย"
+                        title="เริ่มจากใบเสนอราคา"
+                        detail="สร้าง → เสนอ → อนุมัติ"
+                        icon={<FileText size={20} />}
                         onClick={() =>
                           openDialog("quote", { qty: "1", price: "1000" })
                         }
-                      >
-                        <span>A · งานปกติ</span>
-                        <strong>เริ่มจากใบเสนอราคา</strong>
-                        <small>สร้าง → ผลิต → จัดส่ง</small>
-                        <ArrowRight size={16} />
-                      </button>
-                      <button onClick={() => openJob("JOB-2609-003", "qc")}>
-                        <span>B · ส่งกลับแก้ไข</span>
-                        <strong>ทดลอง QC ไม่ผ่าน</strong>
-                        <small>ส่งกลับผลิตและตรวจซ้ำ</small>
-                        <ArrowRight size={16} />
-                      </button>
-                      <button
+                      />
+                      <QuickActionCard
+                        eyebrow="B · ออกสั่งผลิต"
+                        title="ติดตาม QC ไม่ผ่าน"
+                        detail="เลือกส่งผลิตและตรวจซ้ำ"
+                        icon={<ClipboardCheck size={20} />}
+                        onClick={() => openJob("JOB-2609-003", "qc")}
+                      />
+                      <QuickActionCard
+                        eyebrow="C · จัดการขนส่ง"
+                        title="ส่งงานเข้าสู่ขั้นตอน"
+                        detail="ยืนยันและจัดส่งงาน"
+                        icon={<Truck size={20} />}
                         onClick={() => openJob("JOB-2609-002", "purchase")}
-                      >
-                        <span>C · จ้างภายนอก</span>
-                        <strong>ส่งจ้างบางขั้นตอน</strong>
-                        <small>รับกลับและดูต้นทุน</small>
-                        <ArrowRight size={16} />
-                      </button>
-                      <button onClick={() => navigate("hr")}>
-                        <span>D · ทรัพยากรบุคคล</span>
-                        <strong>ยื่นและอนุมัติใบลา</strong>
-                        <small>แสดงผลในปฏิทิน</small>
-                        <ArrowRight size={16} />
-                      </button>
+                      />
+                      <QuickActionCard
+                        eyebrow="D · หลังการขาย"
+                        title="ยื่นและอนุมัติใบลา"
+                        detail="แสดงผลผู้ใช้งาน"
+                        icon={<CalendarDays size={20} />}
+                        onClick={() => navigate("hr")}
+                      />
                     </div>
                   )}
                   <div className="dashboard-grid">
@@ -1205,31 +1212,6 @@ export default function Home() {
           save={saveDialog}
         />
       )}
-    </div>
-  );
-}
-function Stat({
-  icon,
-  label,
-  value,
-  meta,
-  tone,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  meta: string;
-  tone: string;
-}) {
-  return (
-    <div className="stat-card">
-      <div className={`stat-icon ${tone}`}>{icon}</div>
-      <div className="stat-label">{label}</div>
-      <div className="stat-value">{value}</div>
-      <div className="stat-meta">
-        <ArrowDownRight size={14} />
-        {meta}
-      </div>
     </div>
   );
 }
