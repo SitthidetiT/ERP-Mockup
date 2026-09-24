@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="ภาพชิ้นงานตัวอย่างสมมติ">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9f0f3"/><stop offset="1" stop-color="#cad9df"/></linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbffff"/><stop offset=".55" stop-color="#a9bbc3"/><stop offset="1" stop-color="#6e8795"/></linearGradient>
+  </defs>
+  <rect width="320" height="240" fill="url(#bg)"/>
+  <path d="M55 157l67-73 114 3 32 76-64 31-126-4z" fill="#718d99" opacity=".18"/>
+  <path d="M65 122l55-50 112 11-41 58z" fill="#e9f1f3" stroke="#6e8795" stroke-width="3"/>
+  <path d="M65 122v44l127 15v-40z" fill="url(#metal)" stroke="#6e8795" stroke-width="3"/>
+  <path d="M192 141v40l45-53V83z" fill="#819aa5" stroke="#6e8795" stroke-width="3"/>
+  <ellipse cx="112" cy="116" rx="19" ry="9" fill="#7d98a3" stroke="#557280" stroke-width="3"/>
+  <ellipse cx="112" cy="116" rx="9" ry="4" fill="#e4edef"/>
+  <ellipse cx="177" cy="124" rx="19" ry="9" fill="#7d98a3" stroke="#557280" stroke-width="3"/>
+  <ellipse cx="177" cy="124" rx="9" ry="4" fill="#e4edef"/>
+  <path d="M79 152l96 11M207 151l19-24" stroke="#e5eff2" stroke-width="3" opacity=".8"/>
+  <text x="19" y="220" fill="#60808b" font-family="Arial" font-size="12" font-weight="700" letter-spacing="2">SAMPLE PART / DEMO</text>
+</svg>
