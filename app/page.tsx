@@ -367,24 +367,28 @@ export default function Home() {
   }
   function saveDialog() {
     if (dialog === "quote") {
+      const selectedCustomer = data.customers.find(
+        (customer) => customer.id === form.customerId,
+      );
       if (
-        !form.customer?.trim() ||
+        !selectedCustomer ||
         !form.title?.trim() ||
-        !form.email?.includes("@") ||
         Number(form.qty) <= 0 ||
         Number(form.price) <= 0
       )
         return setError(
-          "กรุณากรอกลูกค้า ชิ้นงาน อีเมล จำนวน และราคาให้ครบถ้วน",
+          "กรุณาเลือกลูกค้าจากทะเบียน แล้วกรอกชิ้นงาน จำนวน และราคาให้ครบถ้วน",
         );
       const n = data.jobs.length + 1;
       const id = `JOB-2609-${String(n).padStart(3, "0")}`;
       const newJob: Job = {
         id,
         quoteId: `QT-2609-${String(n).padStart(3, "0")}`,
-        customer: form.customer,
-        contact: form.contact || "ผู้ติดต่อสมมติ",
-        email: form.email,
+        customerId: selectedCustomer.id,
+        customer: selectedCustomer.name,
+        contact: selectedCustomer.contact,
+        email: selectedCustomer.email,
+        address: selectedCustomer.address,
         title: form.title,
         description: form.description || "ชิ้นงานตัวอย่าง",
         due: form.due || "2026-10-30",
@@ -1476,6 +1480,12 @@ function JobTab({
               <div>
                 <span>อีเมล</span>
                 <strong>{job.email}</strong>
+              </div>
+              <div>
+                <span>ที่อยู่</span>
+                <strong>
+                  {job.address || "ที่อยู่ลูกค้าตัวอย่าง (รอยืนยัน)"}
+                </strong>
               </div>
             </div>
             <dl className="document-details">
@@ -2986,6 +2996,25 @@ function DialogView({
       </select>
     </label>
   );
+  const selectedCustomer = data.customers.find(
+    (customer) => customer.id === form.customerId,
+  );
+  const customerSelect = () => (
+    <label className="field">
+      <span>เลือกลูกค้าจากทะเบียน (ข้อมูลสมมติ)</span>
+      <select
+        value={form.customerId || ""}
+        onChange={(e) => field("customerId", e.target.value)}
+      >
+        <option value="">เลือกลูกค้า</option>
+        {data.customers.map((customer) => (
+          <option key={customer.id} value={customer.id}>
+            {customer.id} · {customer.name}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
   return (
     <div className="modal-backdrop" onMouseDown={close}>
       <div
@@ -3008,23 +3037,34 @@ function DialogView({
           {dialog === "quote" && (
             <>
               <div className="form-grid">
-                {input(
-                  "customer",
-                  "ชื่อลูกค้า (สมมติ)",
-                  "บริษัท ตัวอย่าง เดลต้า จำกัด",
-                )}
-                {input("contact", "ผู้ติดต่อ", "คุณตัวอย่าง")}
-                {input(
-                  "email",
-                  "อีเมลตัวอย่าง",
-                  "contact@delta.example",
-                  "email",
-                )}
+                {customerSelect()}
                 {input("title", "ชื่อชิ้นงาน", "ชิ้นงานรุ่น D")}
                 {input("qty", "จำนวน", "1", "number")}
                 {input("price", "ราคาต่อหน่วย (ตัวอย่าง)", "1000", "number")}
                 {input("due", "กำหนดส่ง", "", "date")}
               </div>
+              {selectedCustomer ? (
+                <div className="customer-lookup">
+                  <div className="customer-avatar">
+                    {selectedCustomer.name.charAt(0)}
+                  </div>
+                  <div>
+                    <strong>{selectedCustomer.name}</strong>
+                    <span>
+                      {selectedCustomer.contact} · {selectedCustomer.email}
+                    </span>
+                    <small>
+                      {selectedCustomer.address} · TAX {selectedCustomer.taxId}
+                    </small>
+                  </div>
+                  <CheckCircle2 size={18} />
+                </div>
+              ) : (
+                <div className="dialog-hint">
+                  เลือกลูกค้าหนึ่งรายเพื่อดึงชื่อผู้ติดต่อ อีเมล ที่อยู่
+                  และเลขประจำตัวผู้เสียภาษี ลงในใบเสนอราคา
+                </div>
+              )}
               {input("description", "รายละเอียดชิ้นงาน", "รายละเอียดตัวอย่าง")}
             </>
           )}

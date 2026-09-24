@@ -51,12 +51,22 @@ export type QuoteLine = {
   qty: number;
   price: number;
 };
+export type Customer = {
+  id: string;
+  name: string;
+  contact: string;
+  email: string;
+  address: string;
+  taxId: string;
+};
 export type Job = {
   id: string;
   quoteId: string;
+  customerId?: string;
   customer: string;
   contact: string;
   email: string;
+  address?: string;
   title: string;
   description: string;
   due: string;
@@ -105,6 +115,7 @@ export type StockMove = {
   jobId?: string;
 };
 export type AppData = {
+  customers: Customer[];
   jobs: Job[];
   leaves: Leave[];
   notifications: string[];
@@ -235,13 +246,49 @@ export const routeOptions = [
 ];
 const stamp = "24 ก.ย. 2569 09:30";
 export const initialData: AppData = {
+  customers: [
+    {
+      id: "CUS-001",
+      name: "บริษัท ตัวอย่าง อัลฟา จำกัด",
+      contact: "คุณอร (ข้อมูลสมมติ)",
+      email: "contact@alpha.example",
+      address: "88/1 ถนนตัวอย่าง แขวงอุตสาหกรรม เขตพัฒนา กรุงเทพฯ 10200",
+      taxId: "0100000000001",
+    },
+    {
+      id: "CUS-002",
+      name: "ห้างหุ้นส่วน ตัวอย่าง เบต้า",
+      contact: "คุณพิม (ข้อมูลสมมติ)",
+      email: "procurement@beta.example",
+      address: "25/9 หมู่ 4 ตำบลตัวอย่าง อำเภอเมือง นครปฐม 73000",
+      taxId: "0100000000002",
+    },
+    {
+      id: "CUS-003",
+      name: "บริษัท ตัวอย่าง แกมมา จำกัด",
+      contact: "คุณนที (ข้อมูลสมมติ)",
+      email: "orders@gamma.example",
+      address: "101 อาคารตัวอย่าง ชั้น 6 ถนนสุขุมวิท เขตวัฒนา กรุงเทพฯ 10110",
+      taxId: "0100000000003",
+    },
+    {
+      id: "CUS-004",
+      name: "บริษัท ตัวอย่าง เดลต้า จำกัด",
+      contact: "คุณดา (ข้อมูลสมมติ)",
+      email: "sample@delta.example",
+      address: "79/4 ถนนอุตสาหกรรม ตำบลตัวอย่าง อำเภอบางปะอิน อยุธยา 13160",
+      taxId: "0100000000004",
+    },
+  ],
   jobs: [
     {
       id: "JOB-2609-001",
       quoteId: "QT-2609-001",
+      customerId: "CUS-001",
       customer: "บริษัท ตัวอย่าง อัลฟา จำกัด",
       contact: "คุณอร (ข้อมูลสมมติ)",
       email: "contact@alpha.example",
+      address: "88/1 ถนนตัวอย่าง แขวงอุตสาหกรรม เขตพัฒนา กรุงเทพฯ 10200",
       title: "ชุดฐานยึดเครื่องจักร รุ่น A",
       description: "ชิ้นงานตัวอย่างสำหรับเส้นทางผลิตปกติ",
       due: "2026-10-12",
@@ -279,9 +326,11 @@ export const initialData: AppData = {
     {
       id: "JOB-2609-002",
       quoteId: "QT-2609-002",
+      customerId: "CUS-002",
       customer: "ห้างหุ้นส่วน ตัวอย่าง เบต้า",
       contact: "คุณพิม (ข้อมูลสมมติ)",
       email: "procurement@beta.example",
+      address: "25/9 หมู่ 4 ตำบลตัวอย่าง อำเภอเมือง นครปฐม 73000",
       title: "เพลาขับพิเศษ รุ่น B",
       description: "ชิ้นงานตัวอย่างสำหรับจ้างภายนอกบางส่วน",
       due: "2026-10-05",
@@ -316,9 +365,11 @@ export const initialData: AppData = {
     {
       id: "JOB-2609-003",
       quoteId: "QT-2609-003",
+      customerId: "CUS-003",
       customer: "บริษัท ตัวอย่าง แกมมา จำกัด",
       contact: "คุณนที (ข้อมูลสมมติ)",
       email: "orders@gamma.example",
+      address: "101 อาคารตัวอย่าง ชั้น 6 ถนนสุขุมวิท เขตวัฒนา กรุงเทพฯ 10110",
       title: "โครงประกอบ รุ่น C",
       description: "ชิ้นงานตัวอย่างสำหรับตรวจคุณภาพและส่งกลับแก้ไข",
       due: "2026-09-29",
@@ -353,9 +404,11 @@ export const initialData: AppData = {
     {
       id: "JOB-2609-004",
       quoteId: "QT-2609-004",
+      customerId: "CUS-004",
       customer: "บริษัท ตัวอย่าง เดลต้า จำกัด",
       contact: "คุณดา (ข้อมูลสมมติ)",
       email: "sample@delta.example",
+      address: "79/4 ถนนอุตสาหกรรม ตำบลตัวอย่าง อำเภอบางปะอิน อยุธยา 13160",
       title: "ชิ้นส่วนต้นแบบจำกัดสิทธิ์",
       description: "ตัวอย่างการจำกัดการมองเห็นงานประเภทซีเคร็ต",
       due: "2026-10-20",

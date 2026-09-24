@@ -3119,6 +3119,52 @@ input:focus-visible {
   background: #f9fcfc;
 }
 
+.customer-lookup {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  margin: 14px 0;
+  padding: 12px;
+  border: 1px solid #c9e8e2;
+  border-radius: 9px;
+  background: #f3fcfa;
+  color: #176e6b;
+}
+
+.customer-lookup .customer-avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: #d5f3ed;
+  color: #087c78;
+  font-weight: 700;
+}
+
+.customer-lookup strong,
+.customer-lookup span,
+.customer-lookup small {
+  display: block;
+}
+
+.customer-lookup strong {
+  color: #173c50;
+  font-size: 12px;
+}
+
+.customer-lookup span,
+.customer-lookup small {
+  margin-top: 3px;
+  color: #4e6e7d;
+  font-size: 10px;
+}
+
+.customer-lookup small {
+  color: #688391;
+}
+
 @media (max-width: 900px) {
   .quote-toolbar {
     align-items: flex-start;
