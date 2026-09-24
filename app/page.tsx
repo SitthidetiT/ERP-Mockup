@@ -1270,6 +1270,9 @@ function JobTab({
   const [routeReason, setRouteReason] = useState("");
   const parts = costParts(job);
   const costs = Object.values(parts).reduce((a, b) => a + b, 0);
+  const quoteSubtotal = revenue(job);
+  const quoteVat = Math.round(quoteSubtotal * 0.07);
+  const quoteGrandTotal = quoteSubtotal + quoteVat;
   const canEditQuote =
     role === "Sales" || role === "ผู้บริหาร" || role === "ผู้ดูแลระบบ";
   const canDo = (owner: Role) =>
@@ -1400,70 +1403,208 @@ function JobTab({
     );
   if (tab === "quote")
     return (
-      <section className="panel">
-        <div className="section-head">
+      <section className="quote-screen">
+        <div className="quote-toolbar">
           <div>
+            <span className="overline">FORM PREVIEW</span>
             <h2>ใบเสนอราคา {job.quoteId}</h2>
-            <p>ตัวอย่างเอกสารและข้อมูลผู้รับก่อนจำลองการส่ง</p>
+            <p>เอกสารตัวอย่างสำหรับตรวจสอบก่อนจำลองการส่ง</p>
           </div>
-          <Badge tone={job.stage === 0 ? "amber" : "green"}>
-            {job.stage === 0 ? "ร่าง" : "บันทึกแล้ว"}
-          </Badge>
+          <div className="quote-toolbar__actions">
+            <Badge tone={job.stage === 0 ? "amber" : "green"}>
+              {job.stage === 0 ? "ร่างเอกสาร" : "บันทึกแล้ว"}
+            </Badge>
+            <button className="btn secondary" onClick={() => window.print()}>
+              <Download size={16} /> พิมพ์ตัวอย่าง
+            </button>
+            {job.stage === 0 && canEditQuote && (
+              <button
+                className="btn primary"
+                onClick={() => onDialog("send", { email: job.email })}
+              >
+                <Send size={16} /> จำลองการส่ง
+              </button>
+            )}
+            {job.stage === 1 && canEditQuote && (
+              <button
+                className="btn primary"
+                onClick={() => onDialog("response", { response: "ตอบรับ" })}
+              >
+                บันทึกผลตอบรับ
+              </button>
+            )}
+          </div>
         </div>
-        <div className="info-grid">
-          <Info label="ลูกค้า" value={job.customer} />
-          <Info label="อีเมลผู้รับ" value={job.email} />
-          <Info label="ผู้ติดต่อ" value={job.contact} />
-          <Info
-            label="สถานะ"
-            value={
-              job.stage === 0
-                ? "ร่าง"
-                : job.stage === 1
-                  ? "ส่งแล้ว / รอลูกค้าตอบรับ"
-                  : "ลูกค้าตอบรับ (จำลอง)"
-            }
-          />
-        </div>
-        <div className="subheading">รายการสินค้า</div>
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>รายการ</th>
-                <th>จำนวน</th>
-                <th>ราคาต่อหน่วย (ตัวอย่าง)</th>
-                <th>รวม (ตัวอย่าง)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {job.lines.map((l, i) => (
-                <tr key={i}>
-                  <td>
-                    <div className="quote-product">
-                      <Image
-                        src="/product-sample.svg"
-                        alt="ภาพสินค้าตัวอย่าง"
-                        width={40}
-                        height={33}
-                      />
-                      {l.name}
-                    </div>
-                  </td>
-                  <td>{l.qty}</td>
-                  <td>฿{money(l.price)}</td>
-                  <td>฿{money(l.price * l.qty)}</td>
+
+        <article className="document-sheet quotation-document">
+          <header className="document-header">
+            <div className="document-brand">
+              <div className="document-brand__mark">
+                <Boxes size={29} />
+              </div>
+              <div>
+                <strong>ERP COMPANY</strong>
+                <span>PLATFORM</span>
+              </div>
+            </div>
+            <div className="document-company">
+              <strong>บริษัท อีอาร์พี แมนูแฟคเจอริง จำกัด</strong>
+              <span>
+                99/9 ถนนตัวอย่าง แขวงอุตสาหกรรม เขตพัฒนา กรุงเทพฯ 10200
+              </span>
+              <span>
+                โทร. 02-000-0000 · sales@erp-company.example · TAX 0100000000000
+              </span>
+            </div>
+          </header>
+
+          <div className="document-title">
+            <span>QUOTATION</span>
+            <h1>ใบเสนอราคา</h1>
+          </div>
+
+          <div className="document-meta">
+            <div className="document-recipient">
+              <div>
+                <span>เรียน</span>
+                <strong>{job.customer}</strong>
+              </div>
+              <div>
+                <span>ผู้ติดต่อ</span>
+                <strong>{job.contact}</strong>
+              </div>
+              <div>
+                <span>อีเมล</span>
+                <strong>{job.email}</strong>
+              </div>
+            </div>
+            <dl className="document-details">
+              <div>
+                <dt>เลขที่ใบเสนอราคา</dt>
+                <dd>{job.quoteId}</dd>
+              </div>
+              <div>
+                <dt>วันที่</dt>
+                <dd>24 กันยายน 2569</dd>
+              </div>
+              <div>
+                <dt>ยืนราคา</dt>
+                <dd>30 วัน (ตัวอย่าง)</dd>
+              </div>
+              <div>
+                <dt>เงื่อนไขชำระเงิน</dt>
+                <dd>30 วัน (ตัวอย่าง)</dd>
+              </div>
+              <div>
+                <dt>กำหนดส่ง</dt>
+                <dd>{dateTH(job.due)}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="document-subject">
+            <strong>เรื่อง</strong>
+            <span>{job.title}</span>
+          </div>
+
+          <div className="document-table-wrap">
+            <table className="document-table">
+              <thead>
+                <tr>
+                  <th>ลำดับ</th>
+                  <th>รายการ / รายละเอียด</th>
+                  <th>แบบ / รุ่น</th>
+                  <th>วัสดุ</th>
+                  <th>จำนวน</th>
+                  <th>ราคาต่อหน่วย</th>
+                  <th>จำนวนเงิน (บาท)</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="quote-total">
-          <span>ยอดรวมตัวอย่าง</span>
-          <strong>฿{money(revenue(job))}</strong>
-        </div>
+              </thead>
+              <tbody>
+                {job.lines.map((line, index) => (
+                  <tr key={`${line.name}-${index}`}>
+                    <td className="document-table__number">{index + 1}</td>
+                    <td>
+                      <strong>{line.name}</strong>
+                      <span>{job.description}</span>
+                      {index === 0 && (
+                        <div className="document-drawing">
+                          <Image
+                            src="/product-sample.svg"
+                            alt="แบบชิ้นงานตัวอย่าง"
+                            width={132}
+                            height={80}
+                          />
+                          <small>ภาพและแบบชิ้นงานตัวอย่าง</small>
+                        </div>
+                      )}
+                    </td>
+                    <td>REV. 01</td>
+                    <td>ตามแบบ</td>
+                    <td>{line.qty} ชุด</td>
+                    <td>฿{money(line.price)}</td>
+                    <td className="document-table__amount">
+                      ฿{money(line.price * line.qty)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="document-bottom">
+            <div className="document-terms">
+              <h3>เงื่อนไขการชำระเงิน</h3>
+              <div>
+                <span>ชำระเมื่อยืนยันการสั่งซื้อ</span>
+                <strong>30% (ตัวอย่าง)</strong>
+              </div>
+              <div>
+                <span>ชำระก่อนจัดส่ง</span>
+                <strong>70% (ตัวอย่าง)</strong>
+              </div>
+              <p>
+                เอกสารนี้เป็นข้อมูลสมมติสำหรับสาธิตระบบ
+                ราคายังไม่รวมเงื่อนไขจริง และต้องได้รับการยืนยันก่อนดำเนินการ
+              </p>
+            </div>
+            <dl className="document-totals">
+              <div>
+                <dt>รวมเป็นเงิน</dt>
+                <dd>฿{money(quoteSubtotal)}</dd>
+              </div>
+              <div>
+                <dt>ภาษีมูลค่าเพิ่ม 7%</dt>
+                <dd>฿{money(quoteVat)}</dd>
+              </div>
+              <div className="document-totals__grand">
+                <dt>รวมทั้งสิ้น</dt>
+                <dd>฿{money(quoteGrandTotal)}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <footer className="document-approval">
+            <div>
+              <span>ผู้จัดทำเอกสาร</span>
+              <strong>ทีมขาย ERP Company</strong>
+              <small>ผู้มีอำนาจเสนอราคา (ข้อมูลสมมติ)</small>
+            </div>
+            <div>
+              <span>ยืนยันรับทราบใบเสนอราคา</span>
+              <strong>
+                ........................................................
+              </strong>
+              <small>ลายเซ็นและตราบริษัทลูกค้า</small>
+            </div>
+          </footer>
+          <p className="document-disclaimer">
+            เอกสารนี้สร้างจากระบบ ERP Company Platform เพื่อการสาธิตเท่านั้น
+          </p>
+        </article>
+
         {job.stage === 0 && canEditQuote && (
-          <div className="inline-form">
+          <div className="inline-form quote-line-editor">
             <input
               placeholder="ชื่อรายการเพิ่มเติม"
               value={extraLine.name}
@@ -1519,27 +1660,6 @@ function JobTab({
             </button>
           </div>
         )}
-        <div className="panel-actions">
-          <button className="btn secondary" onClick={() => window.print()}>
-            <Download size={16} /> พิมพ์ตัวอย่าง
-          </button>
-          {job.stage === 0 && canEditQuote && (
-            <button
-              className="btn primary"
-              onClick={() => onDialog("send", { email: job.email })}
-            >
-              <Send size={16} /> ตรวจผู้รับและจำลองการส่ง
-            </button>
-          )}
-          {job.stage === 1 && canEditQuote && (
-            <button
-              className="btn primary"
-              onClick={() => onDialog("response", { response: "ตอบรับ" })}
-            >
-              บันทึกผลตอบรับ
-            </button>
-          )}
-        </div>
       </section>
     );
   if (tab === "drawing")
