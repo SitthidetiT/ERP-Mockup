@@ -9,11 +9,13 @@ import {
   ArrowLeft,
   ArrowRight,
   Bell,
+  Box,
   Boxes,
   BriefcaseBusiness,
   CalendarDays,
   Check,
   CheckCircle2,
+  ChartNoAxesColumnIncreasing,
   ChevronDown,
   ChevronRight,
   CircleAlert,
@@ -37,6 +39,7 @@ import {
   ShieldCheck,
   ShoppingCart,
   Sparkles,
+  Tag,
   Truck,
   UserRound,
   Users,
@@ -1065,7 +1068,7 @@ export default function Home() {
                         eyebrow="A · งานขาย"
                         title="เริ่มจากใบเสนอราคา"
                         detail="สร้าง → เสนอ → อนุมัติ"
-                        icon={<FileText size={20} />}
+                        icon={<Tag size={20} />}
                         onClick={() =>
                           openDialog("quote", { qty: "1", price: "1000" })
                         }
@@ -1074,7 +1077,7 @@ export default function Home() {
                         eyebrow="B · ออกสั่งผลิต"
                         title="ติดตาม QC ไม่ผ่าน"
                         detail="เลือกส่งผลิตและตรวจซ้ำ"
-                        icon={<ClipboardCheck size={20} />}
+                        icon={<Settings2 size={20} />}
                         onClick={() => openJob("JOB-2609-003", "qc")}
                       />
                       <QuickActionCard
@@ -1088,7 +1091,7 @@ export default function Home() {
                         eyebrow="D · หลังการขาย"
                         title="ยื่นและอนุมัติใบลา"
                         detail="แสดงผลผู้ใช้งาน"
-                        icon={<CalendarDays size={20} />}
+                        icon={<Box size={20} />}
                         onClick={() => navigate("hr")}
                       />
                     </div>
@@ -1108,9 +1111,12 @@ export default function Home() {
                       <div className="workflow-flow">
                         {[
                           { label: "ใบเสนอราคา", icon: FileText },
-                          { label: "รับงาน", icon: ClipboardCheck },
+                          { label: "รับงาน", icon: CheckCircle2 },
                           { label: "วิศวกรรม", icon: Settings2 },
-                          { label: "วางแผน", icon: Activity },
+                          {
+                            label: "วางแผน",
+                            icon: ChartNoAxesColumnIncreasing,
+                          },
                           { label: "ผลิต", icon: Factory },
                           { label: "ตรวจ QC", icon: ShieldCheck },
                           { label: "จัดส่ง", icon: Truck },
