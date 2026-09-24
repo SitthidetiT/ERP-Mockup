@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+const fs = require('fs');
+
+const code = `import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Boxes } from "lucide-react";
 import { money } from "../../app/data";
@@ -37,7 +39,7 @@ const dateTH = (dateStr: string) => {
     "พฤศจิกายน",
     "ธันวาคม",
   ];
-  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
+  return \`\${d.getDate()} \${months[d.getMonth()]} \${d.getFullYear() + 543}\`;
 };
 
 interface PrintEngineProps {
@@ -337,7 +339,7 @@ export default function PrintEngine({ job, quoteSubtotal, quoteVat, quoteGrandTo
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{ __html: \`
         @media print {
           .a4-page { display: block !important; margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; padding: 12mm; }
           @page { size: A4 portrait; margin: 0; }
@@ -366,7 +368,7 @@ export default function PrintEngine({ job, quoteSubtotal, quoteVat, quoteGrandTo
           color: #666;
           font-weight: bold;
         }
-      `}} />
+      \`}} />
 
       <div className="print-engine-container">
         
@@ -423,3 +425,7 @@ export default function PrintEngine({ job, quoteSubtotal, quoteVat, quoteGrandTo
     </>
   );
 }
+`;
+
+fs.writeFileSync('components/quotation/PrintEngine.tsx', code, 'utf-8');
+console.log('Successfully rewrote PrintEngine.tsx with exact original layout!');
