@@ -2443,6 +2443,12 @@ input:focus-visible {
   margin: 0;
 }
 
+.scenario-grid .quick-action-card__icon,
+.scenario-grid .quick-action-card__action {
+  display: grid;
+  place-items: center;
+}
+
 .scenario-grid .quick-action-card__icon svg,
 .scenario-grid .quick-action-card__action svg {
   color: #0f9f95;
