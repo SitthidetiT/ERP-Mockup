@@ -171,6 +171,11 @@ export default function Home() {
     setReady(true);
   }, []);
   useEffect(() => {
+    if (window.location.pathname === "/") {
+      window.location.replace("/dashboard");
+    }
+  }, []);
+  useEffect(() => {
     if (ready) localStorage.setItem(STORAGE, JSON.stringify(data));
   }, [data, ready]);
   useEffect(() => {
@@ -233,6 +238,10 @@ export default function Home() {
     .slice(0, 4);
   const jobsFor = (check: (j: Job) => boolean) => listedJobs.filter(check);
   function navigate(next: ModuleId) {
+    if (next === "dashboard" && window.location.pathname !== "/dashboard") {
+      window.location.assign("/dashboard");
+      return;
+    }
     setModule(next);
     setJobId(null);
     setTab("overview");
