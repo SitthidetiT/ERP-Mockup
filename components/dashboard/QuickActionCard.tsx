@@ -17,16 +17,16 @@ export function QuickActionCard({
   onClick,
 }: QuickActionCardProps) {
   return (
-    <button type="button" className="quick-action-card" onClick={onClick}>
-      <span className="quick-action-card__icon">{icon}</span>
-      <span className="quick-action-card__content">
-        <span className="quick-action-card__eyebrow">{eyebrow}</span>
-        <strong>{title}</strong>
-        <small>{detail}</small>
-      </span>
-      <span className="quick-action-card__action" aria-hidden="true">
-        <ArrowRight size={17} />
-      </span>
+    <button className="quick-action-card" onClick={onClick}>
+      <div className="qa-icon">{icon}</div>
+      <div className="qa-content">
+        <span className="qa-eyebrow">{eyebrow}</span>
+        <strong className="qa-title">{title}</strong>
+        <p className="qa-detail">{detail}</p>
+      </div>
+      <div className="qa-arrow">
+        <ArrowRight size={18} />
+      </div>
     </button>
   );
 }

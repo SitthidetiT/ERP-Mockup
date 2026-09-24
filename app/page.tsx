@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { DashboardView } from "../components/dashboard/DashboardView";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { QuickActionCard } from "@/components/dashboard/QuickActionCard";
 import {
@@ -77,7 +78,7 @@ type Dialog =
   | "leave"
   | "settings"
   | null;
-const STORAGE = "erp-company-platform-v1";
+const STORAGE = "erp-company-platform-v2";
 const iconMap: Record<ModuleId, React.ElementType> = {
   dashboard: LayoutDashboard,
   access: ShieldCheck,
@@ -895,6 +896,7 @@ export default function Home() {
                   <div className="eyebrow">
                     รายละเอียดงาน <span>/{job.id}</span>
                   </div>
+                  <div className="breadcrumb">ERP COMPANY PLATFORM <span>/</span> ภาพรวม</div>
                   <h1>{job.title}</h1>
                   <p>
                     {job.customer} · กำหนดส่ง {dateTH(job.due)}
@@ -1277,6 +1279,33 @@ function JobTab({
   const quoteSubtotal = revenue(job);
   const quoteVat = Math.round(quoteSubtotal * 0.07);
   const quoteGrandTotal = quoteSubtotal + quoteVat;
+  const quoteParts = [
+    "ชุดขับเคลื่อนรุ่น DEMO-01",
+    "2IK6RGN-6W",
+    "ชุดเกียร์และเพลาตามแบบ",
+    "Gear",
+    "Speed",
+    "รางเลื่อนอลูมิเนียมรุ่นตัวอย่าง",
+    "KHF55-2060-4000",
+    "MTSRK16-710-F25-R12-T10-Q12-S23-E10-KR0",
+    "MTSGR16",
+    "ชุดยึดและสกรูประกอบ",
+    "LHFC16",
+    "Shaft 635 x 16",
+    "เซนเซอร์ตรวจจับตำแหน่ง",
+    "CDJP2B16-15D",
+    "PZ-V11",
+    "สายสัญญาณและขั้วต่อ",
+    "P-2025-ME-SCH-C00001-17",
+    "AS1201F-M5-06A",
+    "P-2025-ME-SCH-C00001-16",
+    "P-2025-ME-SCH-C00001-18",
+    "ประกอบและทดสอบการทำงาน",
+    "CTS M5 x 12",
+    "socket head cap screw_iso 4762 M3 x 10",
+    "pan head cross recess screw ISO 7045",
+    "รับประกัน 1 ปี (ข้อมูลสมมติ)",
+  ];
   const canEditQuote =
     role === "Sales" || role === "ผู้บริหาร" || role === "ผู้ดูแลระบบ";
   const canDo = (owner: Role) =>
@@ -1440,177 +1469,236 @@ function JobTab({
           </div>
         </div>
 
-        <article className="document-sheet quotation-document">
-          <header className="document-header">
-            <div className="document-brand">
-              <div className="document-brand__mark">
-                <Boxes size={29} />
+        <style>{`
+          @media print {
+            body * {
+              visibility: hidden;
+            }
+            .printable-article, .printable-article * {
+              visibility: visible;
+            }
+            .printable-article {
+              position: absolute;
+              left: 0;
+              top: 0;
+              margin: 0 !important;
+              box-shadow: none !important;
+            }
+            @page {
+              size: A4;
+              margin: 0;
+            }
+          }
+        `}</style>
+        <article className="printable-article" style={{
+          width: '210mm',
+          minHeight: '297mm',
+          background: 'white',
+          color: 'black',
+          fontFamily: 'Arial, Helvetica, sans-serif',
+          fontSize: '11px',
+          padding: '40px',
+          boxSizing: 'border-box',
+          margin: '20px auto',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+            <div style={{ width: '120px', textAlign: 'center', color: '#c00', fontWeight: 'bold', marginRight: '20px' }}>
+              <div style={{ fontSize: '36px', margin: '0', lineHeight: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Boxes size={36} color="#c00" style={{ marginRight: '5px' }} />
+                ERP
               </div>
-              <div>
-                <strong>ERP COMPANY</strong>
-                <span>PLATFORM</span>
-              </div>
+              <div style={{ fontSize: '8px', letterSpacing: '1px', marginTop: '2px' }}>ERP - TECH SYSTEMS</div>
             </div>
-            <div className="document-company">
-              <strong>บริษัท อีอาร์พี แมนูแฟคเจอริง จำกัด</strong>
-              <span>
-                99/9 ถนนตัวอย่าง แขวงอุตสาหกรรม เขตพัฒนา กรุงเทพฯ 10200
-              </span>
-              <span>
-                โทร. 02-000-0000 · sales@erp-company.example · TAX 0100000000000
-              </span>
+            <div style={{ flex: 1 }}>
+              <h1 style={{ color: '#c00', fontSize: '24px', fontWeight: 'bold', fontStyle: 'italic', margin: '0 0 5px 0', letterSpacing: '1px' }}>ERP - MANUFACTURING SYSTEMS CO., LTD</h1>
+              <p style={{ margin: '2px 0', fontSize: '11px', fontWeight: 'bold' }}>Manufacturing : 99/9 Demo Road, Industrial District, Bangkok 10200 Thailand (Head Office)</p>
+              <p style={{ margin: '2px 0', fontSize: '11px', fontWeight: 'bold' }}>Tel : 02 000 0000 E-Mail : sales@erp-company.example TAX: 0100000000000</p>
             </div>
-          </header>
-
-          <div className="document-title">
-            <span>QUOTATION</span>
-            <h1>ใบเสนอราคา</h1>
           </div>
 
-          <div className="document-meta">
-            <div className="document-recipient">
-              <div>
-                <span>เรียน</span>
-                <strong>{job.customer}</strong>
-              </div>
-              <div>
-                <span>ผู้ติดต่อ</span>
-                <strong>{job.contact}</strong>
-              </div>
-              <div>
-                <span>อีเมล</span>
-                <strong>{job.email}</strong>
-              </div>
-              <div>
-                <span>ที่อยู่</span>
-                <strong>
+          <div style={{ borderTop: '1px solid black', borderBottom: '1px solid black', textAlign: 'center', padding: '5px 0', marginBottom: '10px' }}>
+            <h2 style={{ fontSize: '26px', fontWeight: 'bold', fontStyle: 'italic', margin: 0, letterSpacing: '1px' }}>Quotation</h2>
+          </div>
+
+          <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid black', fontSize: '11px', marginBottom: '10px' }}>
+            <tbody>
+              <tr>
+                <td rowSpan={2} style={{ width: '30px', padding: '4px 6px', verticalAlign: 'top', fontWeight: 'bold' }}>To:</td>
+                <td rowSpan={2} style={{ padding: '4px 6px', verticalAlign: 'top', borderRight: '1px solid black' }}>
+                  <strong>{job.customer}</strong><br/>
                   {job.address || "ที่อยู่ลูกค้าตัวอย่าง (รอยืนยัน)"}
-                </strong>
-              </div>
-            </div>
-            <dl className="document-details">
-              <div>
-                <dt>เลขที่ใบเสนอราคา</dt>
-                <dd>{job.quoteId}</dd>
-              </div>
-              <div>
-                <dt>วันที่</dt>
-                <dd>24 กันยายน 2569</dd>
-              </div>
-              <div>
-                <dt>ยืนราคา</dt>
-                <dd>30 วัน (ตัวอย่าง)</dd>
-              </div>
-              <div>
-                <dt>เงื่อนไขชำระเงิน</dt>
-                <dd>30 วัน (ตัวอย่าง)</dd>
-              </div>
-              <div>
-                <dt>กำหนดส่ง</dt>
-                <dd>{dateTH(job.due)}</dd>
-              </div>
-            </dl>
-          </div>
+                </td>
+                <td style={{ width: '120px', padding: '4px 6px', borderRight: '1px solid black', borderBottom: '1px solid black', fontWeight: 'bold' }}>Quotation No.</td>
+                <td style={{ width: '200px', padding: '4px 6px', textAlign: 'center', borderBottom: '1px solid black', fontWeight: 'bold' }}>{job.quoteId} REV 01</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '4px 6px', borderRight: '1px solid black', borderBottom: '1px solid black', fontWeight: 'bold' }}>Date</td>
+                <td style={{ padding: '4px 6px', textAlign: 'center', borderBottom: '1px solid black' }}>24 September 2026</td>
+              </tr>
+              <tr>
+                <td rowSpan={2} style={{ padding: '4px 6px', verticalAlign: 'top', borderTop: '1px solid black', fontWeight: 'bold' }}>Attn:</td>
+                <td rowSpan={2} style={{ padding: '4px 6px', verticalAlign: 'top', borderRight: '1px solid black', borderTop: '1px solid black' }}>
+                  <strong>{job.contact}</strong>
+                </td>
+                <td style={{ padding: '4px 6px', borderRight: '1px solid black', borderBottom: '1px solid black', fontWeight: 'bold' }}>Price Validity</td>
+                <td style={{ padding: '4px 6px', textAlign: 'center', borderBottom: '1px solid black' }}>30 DAYS</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '4px 6px', borderRight: '1px solid black', borderBottom: '1px solid black', fontWeight: 'bold' }}>Payment Terms</td>
+                <td style={{ padding: '4px 6px', textAlign: 'center', borderBottom: '1px solid black' }}>30 DAYS</td>
+              </tr>
+              <tr>
+                <td rowSpan={2} style={{ padding: '4px 6px', verticalAlign: 'top', borderTop: '1px solid black', fontWeight: 'bold' }}>C.c.:</td>
+                <td rowSpan={2} style={{ padding: '4px 6px', verticalAlign: 'top', borderRight: '1px solid black', borderTop: '1px solid black' }}>—</td>
+                <td style={{ padding: '4px 6px', borderRight: '1px solid black', borderBottom: '1px solid black', fontWeight: 'bold' }}>Lead Time</td>
+                <td style={{ padding: '4px 6px', textAlign: 'center', borderBottom: '1px solid black' }}>{dateTH(job.due)}</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '4px 6px', borderRight: '1px solid black', fontWeight: 'bold' }}>Contact Person</td>
+                <td style={{ padding: '4px 6px', textAlign: 'center' }}>ERP SALES (MOCK)</td>
+              </tr>
+            </tbody>
+          </table>
 
-          <div className="document-subject">
-            <strong>เรื่อง</strong>
-            <span>{job.title}</span>
-          </div>
-
-          <div className="document-table-wrap">
-            <table className="document-table">
-              <thead>
-                <tr>
-                  <th>ลำดับ</th>
-                  <th>รายการ / รายละเอียด</th>
-                  <th>แบบ / รุ่น</th>
-                  <th>วัสดุ</th>
-                  <th>จำนวน</th>
-                  <th>ราคาต่อหน่วย</th>
-                  <th>จำนวนเงิน (บาท)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {job.lines.map((line, index) => (
-                  <tr key={`${line.name}-${index}`}>
-                    <td className="document-table__number">{index + 1}</td>
-                    <td>
-                      <strong>{line.name}</strong>
-                      <span>{job.description}</span>
-                      {index === 0 && (
-                        <div className="document-drawing">
-                          <Image
-                            src="/product-sample.svg"
-                            alt="แบบชิ้นงานตัวอย่าง"
-                            width={132}
-                            height={80}
-                          />
-                          <small>ภาพและแบบชิ้นงานตัวอย่าง</small>
-                        </div>
-                      )}
+          <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid black', fontSize: '11px', tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: '4%' }} />
+              <col style={{ width: '28%' }} />
+              <col style={{ width: '12%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '7%' }} />
+              <col style={{ width: '8%' }} />
+              <col style={{ width: '8%' }} />
+              <col style={{ width: '8%' }} />
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '10%' }} />
+            </colgroup>
+            <thead>
+              <tr>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Item</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Part Name</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Drawing Form</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Part No.</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Material</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Finishing</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Quantity</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Unit Price</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Discount</th>
+                <th style={{ border: '1px solid black', fontWeight: 'bold', textAlign: 'center', padding: '6px 4px', fontStyle: 'italic' }}>Amount (THB)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {job.lines.map((line, index) => (
+                <React.Fragment key={line.name + index}>
+                  <tr>
+                    <td rowSpan={2} style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top', fontWeight: 'bold' }}>{index + 1}</td>
+                    <td rowSpan={2} style={{ border: '1px solid black', padding: '0', width: '30%', verticalAlign: 'top' }}>
+                      <div style={{ padding: '6px 4px' }}>
+                        <strong>{line.name}</strong>
+                        <div style={{ margin: '8px 0' }}>Size : {job.description}</div>
+                        <strong>Parts :</strong>
+                      </div>
+                      <div style={{ lineHeight: '1.6' }}>
+                        {quoteParts.map((part, i) => (
+                          <div key={i} style={{ padding: '2px 6px', backgroundColor: i % 2 === 1 ? '#f5f5f5' : 'transparent' }}>{part}</div>
+                        ))}
+                      </div>
                     </td>
-                    <td>REV. 01</td>
-                    <td>ตามแบบ</td>
-                    <td>{line.qty} ชุด</td>
-                    <td>฿{money(line.price)}</td>
-                    <td className="document-table__amount">
-                      ฿{money(line.price * line.qty)}
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top' }}>ERP DEMO</td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top' }}>MOCK-{String(index + 1).padStart(3, "0")}</td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top' }}>AL</td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top' }}>N/A</td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top' }}>{line.qty} Set</td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'right', verticalAlign: 'top', fontWeight: 'bold' }}>{money(line.price)}</td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'center', verticalAlign: 'top' }}></td>
+                    <td style={{ border: '1px solid black', padding: '6px 4px', textAlign: 'right', verticalAlign: 'top', fontWeight: 'bold' }}>{money(line.price * line.qty)}</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={8} style={{ border: '1px solid black', padding: '10px', verticalAlign: 'top', position: 'relative' }}>
+                      <div style={{ border: '1px solid #ccc', display: 'inline-block', padding: '4px', fontSize: '8px', color: '#666', marginBottom: '15px', maxWidth: '350px', lineHeight: '1.2' }}>
+                        EXCEPT AS OTHERWISE PROVIDED BY CONTRACTOR IN DRAWING THESE DRAWINGS AND SPECIFICATIONS ARE THE PROPERTY OF ERP COMPANY CO.,LTD. AND MUST BE RETURNED UPON REQUEST. MUST NOT BE MANUFACTURED OR USED BY OTHERS WITHOUT WRITTEN PERMISSION OF ERP COMPANY CO.,LTD.
+                      </div>
+                      <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                        <Image
+                          src="/product-sample.svg"
+                          alt="แบบชิ้นงานตัวอย่าง"
+                          width={400}
+                          height={180}
+                          style={{ objectFit: 'contain' }}
+                        />
+                      </div>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </React.Fragment>
+              ))}
 
-          <div className="document-bottom">
-            <div className="document-terms">
-              <h3>เงื่อนไขการชำระเงิน</h3>
-              <div>
-                <span>ชำระเมื่อยืนยันการสั่งซื้อ</span>
-                <strong>30% (ตัวอย่าง)</strong>
-              </div>
-              <div>
-                <span>ชำระก่อนจัดส่ง</span>
-                <strong>70% (ตัวอย่าง)</strong>
-              </div>
-              <p>
-                เอกสารนี้เป็นข้อมูลสมมติสำหรับสาธิตระบบ
-                ราคายังไม่รวมเงื่อนไขจริง และต้องได้รับการยืนยันก่อนดำเนินการ
-              </p>
-            </div>
-            <dl className="document-totals">
-              <div>
-                <dt>รวมเป็นเงิน</dt>
-                <dd>฿{money(quoteSubtotal)}</dd>
-              </div>
-              <div>
-                <dt>ภาษีมูลค่าเพิ่ม 7%</dt>
-                <dd>฿{money(quoteVat)}</dd>
-              </div>
-              <div className="document-totals__grand">
-                <dt>รวมทั้งสิ้น</dt>
-                <dd>฿{money(quoteGrandTotal)}</dd>
-              </div>
-            </dl>
-          </div>
+            </tbody>
+          </table>
+          <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid black', borderTop: 'none', fontSize: '11px', tableLayout: 'fixed', pageBreakInside: 'avoid' }}>
+            <colgroup>
+              <col style={{ width: '4%' }} />
+              <col style={{ width: '28%' }} />
+              <col style={{ width: '12%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '7%' }} />
+              <col style={{ width: '8%' }} />
+              <col style={{ width: '8%' }} />
+              <col style={{ width: '8%' }} />
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '10%' }} />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td colSpan={8} style={{ border: '1px solid black', padding: '8px 10px', verticalAlign: 'top' }}>
+                  <strong style={{ display: 'block', marginBottom: '8px' }}># Payment Systems</strong>
+                  <div style={{ display: 'flex', marginBottom: '4px', paddingLeft: '10px' }}>
+                    <div style={{ width: '150px', fontWeight: 'bold' }}>- Deposit upon order</div>
+                    <div style={{ fontWeight: 'bold' }}>100%</div>
+                  </div>
+                  <div style={{ display: 'flex', marginBottom: '4px', paddingLeft: '10px' }}>
+                    <div style={{ width: '150px', fontWeight: 'bold' }}>- Deliver</div>
+                    <div style={{ fontWeight: 'bold' }}>0%</div>
+                  </div>
+                  <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                    <div style={{ width: '150px', fontWeight: 'bold' }}>- Credit 30 days</div>
+                    <div style={{ fontWeight: 'bold' }}>0%</div>
+                  </div>
+                </td>
+                <td style={{ border: '1px solid black', padding: '8px 10px', fontWeight: 'bold', fontStyle: 'italic', verticalAlign: 'bottom' }}>Total</td>
+                <td style={{ border: '1px solid black', padding: '8px 10px', textAlign: 'right', fontWeight: 'bold', verticalAlign: 'bottom' }}>{money(quoteSubtotal)}</td>
+              </tr>
+              <tr>
+                <td colSpan={8} style={{ border: '1px solid black', padding: '8px 10px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '4px' }}>การจ่ายเงินโดยใช้เช็คโปรดสั่งจ่ายในนามของ บริษัท ERP แมนูแฟคเจอริง จำกัด บริษัท จะคิดดอกเบี้ย 1.5% ต่อเดือน เมื่อชำระช้าเกินกว่ากำหนด</div>
+                  <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Please issue a crossed cheque payable to ERP Manufacturing Systems Co.,Ltd Insert at 15% per month will be charged on overdue account</div>
+                </td>
+                <td style={{ border: '1px solid black', padding: '8px 10px', fontWeight: 'bold', fontStyle: 'italic', verticalAlign: 'middle' }}>VAT 7%</td>
+                <td style={{ border: '1px solid black', padding: '8px 10px', textAlign: 'right', fontWeight: 'bold', verticalAlign: 'middle' }}>{money(quoteVat)}</td>
+              </tr>
+              <tr>
+                <td colSpan={2} style={{ border: '1px solid black', padding: '8px 10px', fontWeight: 'bold', textAlign: 'center' }}>ตัวอักษร</td>
+                <td colSpan={6} style={{ border: '1px solid black', padding: '8px 10px', textAlign: 'center', fontWeight: 'bold' }}>ยอดรวมตามเอกสารตัวอย่าง</td>
+                <td style={{ border: '1px solid black', padding: '8px 10px', fontWeight: 'bold', fontStyle: 'italic' }}>Grand Total</td>
+                <td style={{ border: '1px solid black', padding: '8px 10px', textAlign: 'right', fontWeight: 'bold' }}>{money(quoteGrandTotal)}</td>
+              </tr>
+            </tbody>
+          </table>
 
-          <footer className="document-approval">
-            <div>
-              <span>ผู้จัดทำเอกสาร</span>
-              <strong>ทีมขาย ERP Company</strong>
-              <small>ผู้มีอำนาจเสนอราคา (ข้อมูลสมมติ)</small>
+          <div style={{ display: 'flex', marginTop: '40px', justifyContent: 'space-between', padding: '0 40px' }}>
+            <div style={{ textAlign: 'center', width: '250px' }}>
+              <div style={{ fontWeight: 'bold', fontStyle: 'italic', marginBottom: '30px' }}>APPROVED BY</div>
+              <div style={{ fontSize: '28px', fontFamily: 'cursive', color: '#333', marginBottom: '5px' }}>ERP Sales Director</div>
+              <div style={{ borderBottom: '1px solid black', marginBottom: '5px' }}></div>
+              <div style={{ fontWeight: 'bold', fontStyle: 'italic' }}>ERP Sales Director</div>
+              <div style={{ fontStyle: 'italic', fontSize: '10px' }}>Biz. Development Director</div>
             </div>
-            <div>
-              <span>ยืนยันรับทราบใบเสนอราคา</span>
-              <strong>
-                ........................................................
-              </strong>
-              <small>ลายเซ็นและตราบริษัทลูกค้า</small>
+            <div style={{ textAlign: 'center', width: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <div style={{ borderBottom: '1px dotted black', marginBottom: '8px' }}></div>
+              <div style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Signature &amp; Company Stamp</div>
+              <div style={{ fontStyle: 'italic', fontSize: '10px', marginBottom: '15px' }}>(Please return a copy by email or fax)</div>
+              <div style={{ fontSize: '9px', fontWeight: 'bold' }}>This is a computer generated quotation no signature is required.</div>
             </div>
-          </footer>
-          <p className="document-disclaimer">
-            เอกสารนี้สร้างจากระบบ ERP Company Platform เพื่อการสาธิตเท่านั้น
-          </p>
+          </div>
         </article>
 
         {job.stage === 0 && canEditQuote && (
