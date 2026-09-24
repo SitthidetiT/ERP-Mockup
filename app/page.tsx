@@ -1107,17 +1107,22 @@ export default function Home() {
                       </div>
                       <div className="workflow-flow">
                         {[
-                          "ใบเสนอราคา",
-                          "รับงาน",
-                          "วิศวกรรม",
-                          "วางแผน",
-                          "ผลิต",
-                          "ตรวจ QC",
-                          "จัดส่ง",
-                        ].map((s, i) => (
-                          <div key={s} className="flow-node">
-                            <span>{String(i + 1).padStart(2, "0")}</span>
-                            <strong>{s}</strong>
+                          { label: "ใบเสนอราคา", icon: FileText },
+                          { label: "รับงาน", icon: ClipboardCheck },
+                          { label: "วิศวกรรม", icon: Settings2 },
+                          { label: "วางแผน", icon: Activity },
+                          { label: "ผลิต", icon: Factory },
+                          { label: "ตรวจ QC", icon: ShieldCheck },
+                          { label: "จัดส่ง", icon: Truck },
+                        ].map(({ label, icon: Icon }, i) => (
+                          <div key={label} className="flow-node">
+                            <span className="flow-number">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <span className="flow-icon">
+                              <Icon size={18} strokeWidth={1.9} />
+                            </span>
+                            <strong>{label}</strong>
                             {i < 6 && <ChevronRight size={15} />}
                           </div>
                         ))}

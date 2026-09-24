@@ -2438,6 +2438,16 @@ input:focus-visible {
   color: #0f8179;
 }
 
+.scenario-grid .quick-action-card svg {
+  position: static;
+  margin: 0;
+}
+
+.scenario-grid .quick-action-card__icon svg,
+.scenario-grid .quick-action-card__action svg {
+  color: #0f9f95;
+}
+
 .panel,
 .progress-panel,
 .job-summary {
@@ -2488,12 +2498,32 @@ input:focus-visible {
   gap: 7px;
 }
 
-.flow-node span {
+.flow-node .flow-number {
+  position: absolute;
+  z-index: 1;
+  top: -4px;
+  left: -2px;
+  width: 25px;
+  height: 25px;
+  border: 0;
+  border-radius: 50%;
+  background: #0f9f95;
+  color: #fff;
+  font-size: 9px;
+}
+
+.flow-node .flow-icon {
   width: 39px;
   height: 39px;
-  border-color: #c4e9e3;
+  border: 1px solid #c4e9e3;
+  border-radius: 50%;
+  background: #e9f8f6;
   color: #087c78;
-  font-size: 10px;
+}
+
+.flow-node .flow-icon svg {
+  position: static;
+  margin: 0;
 }
 
 .flow-node strong {
