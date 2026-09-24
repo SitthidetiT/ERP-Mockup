@@ -282,7 +282,7 @@ export default function PrintEngine({ job, quoteSubtotal, quoteVat, quoteGrandTo
     const timer = setTimeout(() => {
       const getH = (id: string) => document.getElementById(id)?.offsetHeight || 0;
       
-      const PAGE_HEIGHT = 960; 
+      const PAGE_HEIGHT = 700; // Lowered significantly to ensure it breaks before physical page ends
       
       const hFull = getH('measure-full-header');
       const hShort = getH('measure-short-header');
