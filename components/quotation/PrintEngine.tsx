@@ -276,12 +276,11 @@ export default function PrintEngine({ job, quoteSubtotal, quoteVat, quoteGrandTo
     <>
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          .print-engine-container { display: block !important; }
-          .a4-page { margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; padding: 12mm; }
+          .a4-page { display: block !important; margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; padding: 12mm; }
           @page { size: A4 portrait; margin: 0; }
         }
         @media screen {
-          .print-engine-container { display: none; }
+          .a4-page { display: none !important; }
         }
         .a4-page {
           width: 210mm;
